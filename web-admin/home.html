@@ -1,0 +1,159 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm">
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="home.html" class="nav-link">Complaints</a>
+                </li>
+                <li class="nav-item">
+                    <a href="newComplaint.html" class="nav-link">New Complaints</a>
+                </li>
+                <li class="nav-item">
+                    <a href="solved.html" class="nav-link">Solved Complaints</a>
+                </li>
+                <li class="nav-item" id="logout">
+                    <a class="nav-link" onclick="logout()">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="c1">
+        <h1>Complaints</h1>
+    </div>
+    <div id="allComplaints">
+        <table id="list" border="2px solid" style="text-align: center;
+            margin:0px auto; font-size: large; font-weight:500; 
+            height:100px; width: 1000px; text-transform: uppercase;">
+            <tbody id="t1" style="background-color: orange;">
+                <tr style="font-weight: 1000;">
+                    <th>Complaints</th>
+                    <th>Name</th>
+                    <th>Contact NO</th>
+                    <th>Resolved</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+          var firebaseConfig = {
+    apiKey: "AIzaSyCBeY90fcwF3k9JJpN9TO8tIXD7-045e9U",
+    authDomain: "takrar-nivaran-app.firebaseapp.com",
+    projectId: "takrar-nivaran-app",
+    storageBucket: "takrar-nivaran-app.appspot.com",
+    messagingSenderId: "717571188783",
+    appId: "1:717571188783:web:17849fdfd2562ab789feda"
+  };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        const db = firebase.firestore();
+        db.settings({
+            timestampInSnapshots: true
+        });
+        const auth = firebase.auth();
+    </script>
+    <!-- <script src="app.js"></script> -->
+    <script>
+        const list = document.querySelector("#list");
+        const myForm = document.querySelector("#myForm");
+        const arr = document.querySelectorAll("input[type=checkbox]");
+        function render(doc) {
+            if (!doc.data().resolved) {
+                let tr = document.createElement("tr");
+                let complaints = document.createElement("td");
+                let Name = document.createElement("td");
+                let Number = document.createElement("td");
+                let myBtn = document.createElement("button");
+                const complaint = doc.data();
+                const other_complaint=doc.data().other_complaint;
+                console.log(complaint.complaints);
+                var complaintString = "";
+                for (var i = 0; i < complaint.complaints.length; i++) {
+                    if (complaint.complaints[i] == "1") {
+                        complaintString += " सांडपाण्या संदर्भात, ";
+                    } else if (complaint.complaints[i] == "2") {
+                        complaintString += " स्वच्छता संदर्भात, ";
+                    } else if (complaint.complaints[i] == "3") {
+                        complaintString += " रोड/फूटपाथ संदर्भात, ";
+                    } else if (complaint.complaints[i] == "4") {
+                        complaintString += " पाणी संदर्भात, ";
+                    } else if (complaint.complaints[i] == "5") {
+                        complaintString += " वीज संदर्भात, ";
+                    } else if (complaint.complaints[i] == "6") {
+                        complaintString += " झाडा संदर्भात, ";
+                    } else if (complaint.complaints[i] == "7") {
+                        complaintString +="इतर;";
+                        complaintString +=other_complaint;
+                    }
+
+                }
+                tr.setAttribute('data-id', doc.id);
+                complaints.textContent = complaintString;
+                Name.textContent = doc.data().Name;
+                Number.textContent = doc.data().Number;
+                myBtn.textContent = "Resolved";
+
+                // tr.appendChild(complaints_id);
+                tr.appendChild(complaints);
+                tr.appendChild(Name);
+                tr.appendChild(Number);
+                tr.appendChild(myBtn);
+                list.appendChild(tr);
+                myBtn.addEventListener("click", (e) => {
+                    db.collection("Complaints").doc(doc.id).update({
+                            resolved: true
+                        }).then(() => {
+                            console.log("Document successfully updated!");
+                            tr.style.display = "none";
+                        })
+                        .catch((error) => {
+                            // The document probably doesn't exist.
+                            console.error("Error updating document: ", error);
+                        })
+                }, false);
+
+            }
+        }
+
+        // getting
+        db.collection("Complaints").orderBy("time", "desc").get().then((snapshot) => {
+            snapshot.docs.forEach(doc => {
+                render(doc);
+            })
+        })
+
+        function logout() {
+            auth.signOut().then(() => {
+                // Sign-out successful.
+                window.location.href = "index.html";
+            }).catch((error) => {
+                // An error happened.
+            });
+        }
+    </script>
+    <!-- <script src="auth.js"></script> -->
+</body>
+
+</html>

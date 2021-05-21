@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+    <style>
+        #login_box {
+            margin-top: 100px;
+            height: 300px;
+            width: 400px;
+            border: 2px solid;
+            padding: 20px;
+            border-radius: 10%;
+            background-color: lightcyan;
+        }
+        
+        input[type=text] {
+            width: 100%;
+        }
+        
+        input[type=password] {
+            width: 100%;
+        }
+        
+        input[type=email] {
+            width: 100%;
+        }
+        
+        button {
+            width: 200px;
+            margin-left: 90px;
+        }
+        
+        label {
+            font-size: large;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body style="background-color:#03b1fc">
+    <div class="container">
+        <div class="row">
+            <div class="offset-4 col-sm-4">
+                <div id="login_box">
+                    <form id="myform">
+                        <div>
+                            <label for="email">Email:</label>
+                            <input type="email" id="email">
+                        </div>
+                        <div>
+                            <label for="pass">Password:</label>&nbsp;
+                            <input type="password" id="pass">
+                        </div>
+                        <br>
+                        <div>
+                            <button class="btn btn-info" onclick="login()" type="button">LOGIN</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      var firebaseConfig = {
+    apiKey: "AIzaSyCBeY90fcwF3k9JJpN9TO8tIXD7-045e9U",
+    authDomain: "takrar-nivaran-app.firebaseapp.com",
+    projectId: "takrar-nivaran-app",
+    storageBucket: "takrar-nivaran-app.appspot.com",
+    messagingSenderId: "717571188783",
+    appId: "1:717571188783:web:17849fdfd2562ab789feda"
+  };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        const db = firebase.firestore();
+        db.settings({
+            timestampInSnapshots: true
+        });
+        const auth = firebase.auth();
+    </script>
+    <script>
+    </script>
+    <script src="auth.js"></script>
+    <!-- <script src="app.js"></script> -->
+</body>
+
+</html>
